@@ -34,8 +34,8 @@ router.get('/employees/:id', async (req, res) => {
 
 router.post('/employees', async (req, res) => {
   try {
-    const { firstName, lastName } = req.body;
-    const newEmployee = new Employee({ firstName: firstName, lastName: lastName });
+    const { firstName, lastName, department } = req.body;
+    const newEmployee = new Employee({ firstName: firstName, lastName: lastName, department: department });
     await newEmployee.save();
     res.json({ message: 'OK' });
   } catch (err) {
@@ -44,13 +44,17 @@ router.post('/employees', async (req, res) => {
 });
 
 router.put('/employees/:id', async (req, res) => {
-  const { firstName, lastName } = req.body;
+  const { firstName, lastName, department } = req.body;
 
   try {
     const emp = await Employee.findById(req.params.id);
     if (emp) {
-      await Employee.updateOne({ _id: req.params.id }, { $set: { firstName: firstName, lastName: lastName } });
-      res.json({ message: 'OK' });
+      await Employee.updateOne(
+        { _id: req.params.id },
+        { $set: { firstName: firstName, lastName: lastName, department: department } }
+      );
+      const empUpdated = await Employee.findById(req.params.id);
+      res.json(empUpdated);
     } else res.status(404).json({ message: 'Not found...' });
   } catch (err) {
     res.status(500).json(err);
@@ -62,7 +66,7 @@ router.delete('/employees/:id', async (req, res) => {
     const emp = await Employee.findById(req.params.id);
     if (emp) {
       await Employee.deleteOne({ _id: req.params.id });
-      res.json({ message: 'OK' });
+      res.json(emp);
     } else res.status(404).json({ message: 'Not found...' });
   } catch (err) {
     res.status(500).json(err);

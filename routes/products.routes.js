@@ -1,7 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const ObjectId = require('mongodb').ObjectId;
-
 const Product = require('../models/product.model');
 
 router.get('/products', async (req, res) => {
@@ -44,15 +42,14 @@ router.post('/products', async (req, res) => {
     res.status(500).json(err);
   }
 });
-
 router.put('/products/:id', async (req, res) => {
   const { name, client } = req.body;
-
   try {
     const prod = await Product.findById(req.params.id);
     if (prod) {
       await Product.updateOne({ _id: req.params.id }, { $set: { name: name, client: client } });
-      res.json({ message: 'OK' });
+      const prodUpdated = await Product.findById(req.params.id);
+      res.json(prodUpdated);
     } else res.status(404).json({ message: 'Not found...' });
   } catch (err) {
     res.status(500).json(err);
@@ -64,7 +61,7 @@ router.delete('/products/:id', async (req, res) => {
     const prod = await Product.findById(req.params.id);
     if (prod) {
       await Product.deleteOne({ _id: req.params.id });
-      res.json({ message: 'OK' });
+      res.json(prod);
     } else res.status(404).json({ message: 'Not found...' });
   } catch (err) {
     res.status(500).json(err);
