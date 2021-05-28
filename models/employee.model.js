@@ -10,3 +10,5 @@ const employeeSchema = new mongoose.Schema(
     versionKey: false
   }
 );
+
+module.exports = mongoose.model('Employee', employeeSchema);

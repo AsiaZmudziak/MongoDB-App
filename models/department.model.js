@@ -8,3 +8,5 @@ const departmentSchema = new mongoose.Schema(
     versionKey: false
   }
 );
+
+module.exports = mongoose.model('Department', departmentSchema);

@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const Employee = require('../models/employee.model');
-
 router.get('/employees', async (req, res) => {
   try {
     res.json(await Employee.find());
@@ -9,7 +8,6 @@ router.get('/employees', async (req, res) => {
     res.status(500).json(err);
   }
 });
-
 router.get('/employees/random', async (req, res) => {
   try {
     const count = await Employee.countDocuments();
@@ -21,7 +19,6 @@ router.get('/employees/random', async (req, res) => {
     res.json(err);
   }
 });
-
 router.get('/employees/:id', async (req, res) => {
   try {
     const emp = await Employee.findById(req.params.id);
@@ -53,24 +50,21 @@ router.put('/employees/:id', async (req, res) => {
         { _id: req.params.id },
         { $set: { firstName: firstName, lastName: lastName, department: department } }
       );
-      const empUpdated = await Employee.findById(req.params.id);
-      res.json(empUpdated);
+      res.json({ message: 'OK' });
     } else res.status(404).json({ message: 'Not found...' });
   } catch (err) {
     res.status(500).json(err);
   }
 });
-
 router.delete('/employees/:id', async (req, res) => {
   try {
     const emp = await Employee.findById(req.params.id);
     if (emp) {
       await Employee.deleteOne({ _id: req.params.id });
-      res.json(emp);
+      res.json({ message: 'OK' });
     } else res.status(404).json({ message: 'Not found...' });
   } catch (err) {
     res.status(500).json(err);
   }
 });
-
 module.exports = router;
