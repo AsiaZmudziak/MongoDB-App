@@ -42,8 +42,10 @@ router.post('/products', async (req, res) => {
     res.status(500).json(err);
   }
 });
+
 router.put('/products/:id', async (req, res) => {
   const { name, client } = req.body;
+  
   try {
     const prod = await Product.findById(req.params.id);
     if (prod) {

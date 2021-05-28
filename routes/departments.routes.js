@@ -45,7 +45,6 @@ router.post('/departments', async (req, res) => {
 
 router.put('/departments/:id', async (req, res) => {
   const { name } = req.body;
-
   try {
     const dep = await Department.findById(req.params.id);
     if (dep) {
